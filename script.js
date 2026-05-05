@@ -1,9 +1,8 @@
 let horario = JSON.parse(localStorage.getItem('miHorarioSnoopy')) || { 
     "Lunes": [], "Martes": [], "Miercoles": [], "Jueves": [], "Viernes": [] 
 };
-let diaActual = "Martes";
+let diaActual = "Lunes"; // Se actualizará automáticamente al abrir
 
-// Función para guardar todo en el celular
 function guardarEnMemoria() {
     localStorage.setItem('miHorarioSnoopy', JSON.stringify(horario));
 }
@@ -31,7 +30,7 @@ function entrarAlHorario(nombre, curso) {
     document.getElementById('pantalla-bienvenida').classList.remove('active');
     document.getElementById('pantalla-registro').classList.remove('active');
     document.getElementById('pantalla-horario').classList.add('active');
-    iniciarReloj();
+    iniciarRelojYFecha(); // Activa el reloj y la fecha automática
     renderizar();
 }
 
@@ -80,34 +79,49 @@ function renderizar() {
     contenedor.innerHTML = "";
     horario[diaActual].forEach((m, idx) => {
         const div = document.createElement('div');
-        div.className = "card-blanca-grande"; // Usando tu clase de estilo
+        div.className = "card-blanca-grande"; 
         div.style.marginBottom = "15px";
         div.innerHTML = `
             <div style="display:flex; justify-content:space-between; align-items:center;">
                 <div onclick="editarMateria(${idx})">
-                    <h3 style="margin:0;">${m.nombre}</h3>
-                    <p style="margin:0; font-size:12px;">${m.hora}</p>
+                    <h3 style="margin:0; color:#1a4a75;">${m.nombre}</h3>
+                    <p style="margin:5px 0 0; color:#666; font-size:13px;">${m.hora}</p>
                 </div>
-                <button onclick="agregarTarea(${idx})" style="border-radius:50%; width:30px; height:30px;">+</button>
+                <button onclick="agregarTarea(${idx})" style="border-radius:50%; width:30px; height:30px; background:#1a4a75; color:white; border:none;">+</button>
             </div>
-            <div style="margin-top:10px;">
-                ${m.tareas.map(t => `<div style="font-size:13px;">• ${t}</div>`).join('')}
-            </div>
+            ${m.tareas.length > 0 ? `<div style="margin-top:10px; border-top:1px solid #eee; padding-top:10px;">${m.tareas.map(t => `<div style="font-size:14px;">• ${t}</div>`).join('')}</div>` : ''}
         `;
         contenedor.appendChild(div);
     });
 }
 
-function iniciarReloj() {
-    setInterval(() => {
+// ESTA ES LA PARTE NUEVA PARA LA FECHA AUTOMÁTICA
+function iniciarRelojYFecha() {
+    const meses = ["ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"];
+    const diasSemana = ["Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"];
+
+    const actualizarTodo = () => {
         const ahora = new Date();
+        
+        // Actualiza el reloj
         document.getElementById('reloj').innerText = ahora.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-        const meses = ["ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"];
+        
+        // Actualiza el número del día (4) y el mes (MAYO)
+        document.getElementById('dia-num').innerText = ahora.getDate();
         document.getElementById('mes-txt').innerText = meses[ahora.getMonth()];
-    }, 1000);
+        
+        // Detecta el día de la semana actual para mostrar ese horario al abrir
+        if (!window.diaDetectado) {
+            diaActual = diasSemana[ahora.getDay()] === "Domingo" || diasSemana[ahora.getDay()] === "Sabado" ? "Lunes" : diasSemana[ahora.getDay()];
+            window.diaDetectado = true;
+            renderizar();
+        }
+    };
+
+    setInterval(actualizarTodo, 1000);
+    actualizarTodo();
 }
 
-// Carga automática al abrir
 window.onload = function() {
     const user = JSON.parse(localStorage.getItem('usuarioSnoopy'));
     if (user) {
