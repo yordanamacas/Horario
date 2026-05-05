@@ -11,7 +11,7 @@
     <!-- PANTALLA 1: BIENVENIDA -->
     <section id="pantalla-bienvenida" class="active">
         <div class="card-registro">
-            <img src="imagenes/snoopy_ en el techo.jpg" alt="Snoopy" class="img-registro">
+            <img src="images/snoopy_ en el techo.jpg" alt="Snoopy" class="img-registro">
             <h1>Bienvenidos</h1>
             <button class="btn-principal" onclick="irARegistro()">Registrarse</button>
         </div>
@@ -32,27 +32,29 @@
         <div class="user-info" id="user-display">Usuario | Curso</div>
 
         <nav class="nav-dias">
-            <button onclick="seleccionarDia('Lunes', 2)">Lun</button>
-            <button onclick="seleccionarDia('Martes', 3)" class="active">Mar</button>
-            <button onclick="seleccionarDia('Miercoles', 4)">Mie</button>
-            <button onclick="seleccionarDia('Jueves', 5)">Jue</button>
-            <button onclick="seleccionarDia('Viernes', 6)">Vie</button>
+            <button onclick="seleccionarDia('Lunes', 4)">Lun</button>
+            <button onclick="seleccionarDia('Martes', 5)">Mar</button>
+            <button onclick="seleccionarDia('Miercoles', 6)">Mie</button>
+            <button onclick="seleccionarDia('Jueves', 7)">Jue</button>
+            <button onclick="seleccionarDia('Viernes', 8)">Vie</button>
         </nav>
 
         <div class="card-blanca-grande">
             <div class="fecha-seccion">
-                <div id="dia-num">3</div>
-                <div id="mes-txt">MAYO</div>
+                <!-- Estos IDs ahora se llenan automáticamente por el script -->
+                <div id="dia-num">--</div>
+                <div id="mes-txt">MES</div>
             </div>
             <div class="separador-negro"></div>
             <div class="snoopy-contenedor">
-                <img src="imagenes/snooy_ estudiando.jpg" alt="Snoopy">
+                <img src="images/snooy_ estudiando.jpg" alt="Snoopy">
             </div>
             <div class="reloj-seccion" id="reloj">00:00</div>
         </div>
 
         <div id="lista-materias"></div>
 
+        <!-- Botón para añadir nuevas materias -->
         <button class="btn-flotante-add" onclick="nuevaAsignatura()">+</button>
     </section>
 
